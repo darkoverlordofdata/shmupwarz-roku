@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Categories=Game;
+Name=Shmupwarz-Roku
+StartupWMClass=Shmupwarz-Roku
+Comment=Shmupwarz-Roku
+Icon=/home/darko/Documents/GitHub/shmupwarz-roku/Shmupwarz.png
+Exec=/usr/bin/brs-emu-app -do /home/darko/Documents/GitHub/shmupwarz-roku/shmupwarz-roku.zip

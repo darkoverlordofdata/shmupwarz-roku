@@ -1,0 +1,14 @@
+title=ShmupWarz
+subtitle=Give Me Those ShmupWarz
+major_version=0
+minor_version=18
+build_version=3778
+mm_icon_focus_hd=pkg:/images/icon_focus_hd.png
+mm_icon_focus_sd=pkg:/images/icon_focus_hd.png
+screensaver_private=1
+requires_audiometadata=1
+splash_screen_sd=pkg:/images/splash.png
+splash_screen_hd=pkg:/images/splash.png
+splash_color=#000000
+splash_min_time=100
+game=1
