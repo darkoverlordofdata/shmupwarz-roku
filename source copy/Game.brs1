@@ -1,0 +1,69 @@
+' ********************************************************************************************************
+' ********************************************************************************************************
+' **
+' **
+' **
+' ********************************************************************************************************
+' ********************************************************************************************************
+Library "v30/bslDefender.brs"
+
+
+Function CreateGame(h As Integer, w As Integer, title As String) As Object
+    Return {
+        ' **
+        ' ** Properties 
+        Width: w,
+        Height: h,
+        Title: title,    
+        Colors: { 
+            Red: &hAA0000FF, 
+            Green:&h00AA00FF, 
+            Yellow: &hFFFF55FF, 
+            Black: &hFF, 
+            White: &hFFFFFFFF, 
+            Gray: &h404040FF, 
+            Navy: &h080030FF, 
+            DarkRed: &h810000FF,
+        }    
+        Code: bslUniversalControlEventCodes(),
+        Port: CreateObject("roMessagePort"),
+        Clock: CreateObject("roTimespan"),
+        Timer: CreateObject("roTimespan"),
+        AudioPlayer: CreateObject("roAudioPlayer"),
+        AudioPort: CreateObject("roMessagePort"),
+        Files: CreateObject("roFileSystem"),
+        Fonts: {reg:CreateObject("roFontRegistry")},
+        ' **
+        ' ** Methods 
+        Init: Game_Init,
+        ResetScreen: Game_ResetScreen,
+        Run: Game_Run
+    }
+End Function
+
+Function Game_Init(parm As Object) As Object
+    m.audioPlayer.SetMessagePort(m.audioPort)
+    m.fonts.reg.Register("pkg:/assets/fonts/" + parm.font + ".otf")
+    m.fonts.KeysFont = m.fonts.reg.getFont(parm.font.replace("-", " "), 30, False, False)
+
+    Return m
+End Function
+
+Sub Game_Run()
+End Sub
+
+Function IsHD()
+    di = CreateObject("roDeviceInfo")
+    Return (di.GetUIResolution().height >= 720)
+End Function
+
+Sub Game_ResetScreen(p As Object)
+    If IsHD()
+        p.mainScreen = CreateObject("roScreen", True, 854, 480)
+    Else
+        p.mainScreen = CreateObject("roScreen", True, 720, 540)
+    End If
+
+    p.mainScreen.SetMessagePort(m.Port)
+    p.mainScreen.SetAlphaEnable(True)
+End Sub
