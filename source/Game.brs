@@ -1,6 +1,6 @@
 ' ********************************************************************************************************
 ' ********************************************************************************************************
-' **
+' ** Game Object
 ' **
 ' **
 ' ********************************************************************************************************
@@ -11,13 +11,14 @@ Library "v30/bslDefender.brs"
 ' ********************************************************************************************************
 ' ** Game Constructor
 ' **
+' **
 ' ********************************************************************************************************
-Function CreateGame(h As Integer, w As Integer, title As String) As Object
+Function CreateGame(width As Integer, height As Integer, title As String) As Object
     Return {
         ' **
         ' ** Properties 
-        Width: w,
-        Height: h,
+        Width: width,
+        Height: height,
         Title: title,    
         Colors: { 
             Red: &hAA0000FF, 
@@ -36,32 +37,30 @@ Function CreateGame(h As Integer, w As Integer, title As String) As Object
         AudioPlayer: CreateObject("roAudioPlayer"),
         AudioPort: CreateObject("roMessagePort"),
         Files: CreateObject("roFileSystem"),
-        Fonts: {reg:CreateObject("roFontRegistry")},
+        Fonts: {Reg:CreateObject("roFontRegistry")},
         ' **
         ' ** Methods 
-        Init:   Game_Init,
+        Init:   Sub () : End Sub,
+        Draw:   Sub (delta As Float) : End Sub,
+        Update: Sub (delta As Float) : End Sub,
+        Tick:   Sub () : End Sub,
+
         Run:    Game_Run,
-        Draw:   Game_Draw,
-        Update: Game_Update,
-        Tick:   Game_Tick,
+
     }
 End Function
 
-Sub Game_Init()
-End Sub
 
-Sub Game_Draw(delta As Float)
-End Sub
 
-Sub Game_Update(delta As Float)
-End Sub
-
-Sub Game_Tick()
-End Sub
-
+' ********************************************************************************************************
+' ** Game Run
+' ** Implementation
+' **
+' ********************************************************************************************************
 Sub Game_Run()
-    m.audioPlayer.SetMessagePort(m.audioPort)
+    m.AudioPlayer.SetMessagePort(m.AudioPort)
     m.Init()
+
     If IsHD()
         m.Screen = CreateObject("roScreen", True, 854, 480)
     Else
@@ -72,9 +71,9 @@ Sub Game_Run()
     m.Screen.SetAlphaEnable(True)
 
     m.Screen.Clear(0)
-    m.Scale = Int(GetScale(m.Screen, 640, 432))
-    m.CenterX = CInt((m.Screen.GetWidth() - (640 * m.Scale)) / 2)
-    m.CenterY = CInt((m.Screen.GetHeight() - (432 * m.Scale)) / 2)
+    m.Scale = Int(GetScale(m.Screen, m.Height, m.Width))
+    m.CenterX = CInt((m.Screen.GetWidth() - (m.Width * m.Scale)) / 2)
+    m.CenterY = CInt((m.Screen.GetHeight() - (m.Width * m.Scale)) / 2)
     m.BackImage = ScaleBitmap(CreateObject("roBitmap", "pkg:/images/background.png"), m.Scale)
 
 
@@ -82,45 +81,11 @@ Sub Game_Run()
 
         m.Screen.Clear(0)
 
-        m.Draw(0.01667)
         m.Update(0.01667)
+        m.Draw(0.01667)
 
         m.Screen.SwapBuffers()
 
     End While
 End Sub
 
-Function IsHD()
-    di = CreateObject("roDeviceInfo")
-    Return (di.GetUIResolution().height >= 720)
-End Function
-
-
-
-
-Function ScaleBitmap(bitmap As Object, scale As Float, simpleMode = False As Boolean)
-    If bitmap = Invalid Then Return bitmap
-    If scale = 1.0
-        scaled = bitmap
-    Else If scale = int(scale) or simpleMode
-		scaled = CreateObject("roBitmap",{width:int(bitmap.GetWidth()*scale), height:int(bitmap.GetHeight()*scale), alphaenable:True})
-		scaled.DrawScaledObject(0,0,scale,scale,bitmap)
-    Else
-        region = CreateObject("roRegion", bitmap, 0, 0, bitmap.GetWidth(), bitmap.GetHeight())
-        region.SetScaleMode(1)
-        scaled = CreateObject("roBitmap",{width:int(bitmap.GetWidth()*scale), height:int(bitmap.GetHeight()*scale), alphaenable:True})
-        scaled.DrawScaledObject(0,0,scale,scale,region)
-	End If
-    Return scaled
-End Function
-
-Function GetScale(screen As Object, width As Integer, height As Integer) As Float
-    scaleX = screen.GetWidth() / width
-    scaleY = screen.GetHeight() / height
-    If  scaleX > scaleY
-        scale = scaleY
-    Else
-        scale = scaleX
-    End If
-    Return scale
-End Function

@@ -18,8 +18,8 @@ Sub Main()
     ' ********************************************************************************************************
     ' ********************************************************************************************************
     game.Init = Sub () 
-        m.fonts.reg.Register("pkg:/assets/fonts/Gotham-Medium.otf")
-        m.fonts.KeysFont = m.fonts.reg.getFont("Gotham Medium", 30, False, False)
+        m.Fonts.Reg.Register("pkg:/assets/fonts/Gotham-Medium.otf")
+        m.Fonts.KeysFont = m.Fonts.Reg.GetFont("Gotham Medium", 30, False, False)
     End Sub
 
 
